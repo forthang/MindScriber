@@ -19,6 +19,8 @@ type Server struct {
 	storage Storage
 }
 
+var jwtSecret = []byte("superpupersecretkey")
+
 func newServer(storage Storage) *Server {
 	return &Server{storage: storage}
 }
@@ -36,12 +38,17 @@ func (s *Server) MessagesHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+func (s *Server) CreateJWTTokenHandler(w http.ResponseWriter, r *http.Request) {
+
+}
+
 func CreateAndRunServer(storage Storage, addr string) error {
 	server := newServer(storage)
 
 	r := chi.NewRouter()
 
 	r.Post("/messages", server.MessagesHandler)
+	r.Get("/jwt", server.CreateJWTTokenHandler)
 
 	httpServer := &http.Server{
 		Addr:    addr,
