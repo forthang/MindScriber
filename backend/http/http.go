@@ -1,8 +1,10 @@
 package http
 
 import (
+	"encoding/json"
 	"github.com/forthang/esketit/models"
 	"github.com/go-chi/chi/v5"
+	"log"
 	"net/http"
 )
 
@@ -21,9 +23,17 @@ func newServer(storage Storage) *Server {
 	return &Server{storage: storage}
 }
 
-func (s *Server) TaskStatusHandler(w http.ResponseWriter, r *http.Request) {
+func (s *Server) MessagesHandler(w http.ResponseWriter, r *http.Request) {
+	var jsonStruct struct {
+		Message string `json:"message"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&jsonStruct); err != nil {
+		http.Error(w, "Error with parsing JSON", http.StatusBadRequest)
+		return
+	}
+	defer r.Body.Close()
+	log.Println(jsonStruct.Message)
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Hello World"))
 }
 
 func CreateAndRunServer(storage Storage, addr string) error {
@@ -31,7 +41,7 @@ func CreateAndRunServer(storage Storage, addr string) error {
 
 	r := chi.NewRouter()
 
-	r.Get("/status", server.TaskStatusHandler)
+	r.Post("/messages", server.MessagesHandler)
 
 	httpServer := &http.Server{
 		Addr:    addr,
