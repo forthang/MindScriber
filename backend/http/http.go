@@ -19,7 +19,7 @@ type Server struct {
 	storage Storage
 }
 
-var jwtSecret = []byte("superpupersecretkey")
+//var jwtSecret = []byte("superpupersecretkey")
 
 func newServer(storage Storage) *Server {
 	return &Server{storage: storage}
@@ -35,11 +35,16 @@ func (s *Server) MessagesHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 	log.Println(jsonStruct.Message)
+
+	jsonData, jsonErr := json.Marshal(jsonStruct)
+	if jsonErr != nil {
+		http.Error(w, "Error with json marshalling", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-}
-
-func (s *Server) CreateJWTTokenHandler(w http.ResponseWriter, r *http.Request) {
-
+	w.Write(jsonData)
 }
 
 func CreateAndRunServer(storage Storage, addr string) error {
@@ -48,7 +53,6 @@ func CreateAndRunServer(storage Storage, addr string) error {
 	r := chi.NewRouter()
 
 	r.Post("/messages", server.MessagesHandler)
-	r.Get("/jwt", server.CreateJWTTokenHandler)
 
 	httpServer := &http.Server{
 		Addr:    addr,

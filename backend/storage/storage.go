@@ -11,8 +11,11 @@ type Storage struct {
 }
 
 func NewStorage(cfg config.Config) *Storage {
+	db := InitDB(cfg)
+	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.Note{})
 	return &Storage{
-		Postgres: InitDB(cfg),
+		Postgres: db,
 	}
 }
 
