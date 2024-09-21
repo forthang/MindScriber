@@ -6,9 +6,9 @@ import (
 )
 
 type Storage interface {
-	Get(key string) (*storage.Task, error)
-	Put(key string, value *storage.Task) error
-	Post(key string, value *storage.Task) error
+	Get(key string) (string, error)
+	Put(key string, value string) error
+	Post(key string, value string) error
 	Delete(key string) error
 }
 
