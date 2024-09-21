@@ -1,0 +1,42 @@
+.message-input-container {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center horizontally */
+    margin-top: 10%; /* Add some margin at the top */
+    margin-left: 20%;
+}
+
+.message-input-form {
+    display: flex;
+    justify-content: center; /* Center items in the form */
+    width: 100%; /* Full width of the container */
+}
+
+.message-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    flex: 1; /* Allow input to take available space */
+    text-align: center; /* Center text inside the input */
+}
+
+.messages {
+    margin-top: 20px;
+
+    h3 {
+        margin-bottom: 10px;
+    }
+
+    ul {
+        list-style-type: none;
+        padding-left: 0;
+
+        li {
+            background-color: #f4f4f4;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+        }
+    }
+}
