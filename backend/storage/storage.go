@@ -1,42 +1,35 @@
 package storage
 
-import "errors"
+import (
+	"github.com/forthang/esketit/internal/config"
+	"github.com/forthang/esketit/models"
+	"gorm.io/gorm"
+)
 
 type Storage struct {
-	data map[string]string
+	Postgres *gorm.DB
 }
 
-func NewStorage() *Storage {
+func NewStorage(cfg config.Config) *Storage {
 	return &Storage{
-		data: make(map[string]string),
+		Postgres: InitDB(cfg),
 	}
 }
 
-func (rs *Storage) Get(key string) (string, error) {
-	value, exists := rs.data[key]
-	if !exists {
-		return "", errors.New("key not found")
-	}
-	return value, nil
+func (s *Storage) CreateUser(user models.User) error {
+	return s.Postgres.Create(&user).Error
 }
 
-func (rs *Storage) Put(key string, value string) error {
-	rs.data[key] = value
-	return nil
+func (s *Storage) GetUserByID(id uint) (models.User, error) {
+	var user models.User
+	err := s.Postgres.First(&user, id).Error
+	return user, err
 }
 
-func (rs *Storage) Post(key string, value string) error {
-	if _, exists := rs.data[key]; exists {
-		return errors.New("key already exists")
-	}
-	rs.data[key] = value
-	return nil
+func (s *Storage) UpdateUser(user models.User) error {
+	return s.Postgres.Save(&user).Error
 }
 
-func (rs *Storage) Delete(key string) error {
-	if _, exists := rs.data[key]; !exists {
-		return errors.New("key not found")
-	}
-	delete(rs.data, key)
-	return nil
+func (s *Storage) DeleteUser(id uint) error {
+	return s.Postgres.Delete(&models.User{}, id).Error
 }
