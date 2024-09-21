@@ -1,23 +1,35 @@
 import React, { useState } from 'react';
-import './SidePanel.scss';
+import './SidePanel.scss'
+import FileInput from '../../Filemanagment/CreateFile';
 
-const SidePanel = () => {
-    const [files, setFiles] = useState(['File 1', 'File 2', 'File 3']); 
+const SidePanel = ({ files, onCreate }) => {
+    const [selectedFile, setSelectedFile] = useState(null);
 
-    const addFile = () => {
-        const newFileNumber = files.length + 1; 
-        setFiles([...files, `File ${newFileNumber}`]); 
+    const handleFileSelect = (file) => {
+        setSelectedFile(file);
+    };
+
+    const handleCreateFile = () => {
+        const newFile = { name: `New File ${files.length + 1}`, content: '' };
+        onCreate(newFile);
+        setSelectedFile(newFile); // Select newly created file
     };
 
     return (
         <div className="side-panel">
-            <h2>Files</h2>
-            <button className="add-file-button" onClick={addFile}>Add File</button>
-            {files.map((file, index) => (
-                <div key={index} className="file">{file}</div>
-            ))}
+            <h3>Files</h3>
+            <button onClick={handleCreateFile}>Create New File</button>
+            <ul>
+                {files.map((file, index) => (
+                    <li key={index} onClick={() => handleFileSelect(file)}>
+                        {file.name}
+                    </li>
+                ))}
+            </ul>
+            
         </div>
     );
 };
+
 
 export default SidePanel;
