@@ -1,9 +1,7 @@
 package models
 
-import "gorm.io/gorm"
-
 type Note struct {
-	gorm.Model
-	Note    string
-	OwnerId int
+	ID      uint   `gorm:"primaryKey"`
+	Note    string `gorm:"uniqueIndex;not null"`
+	OwnerID uint   `gorm:"not null"`
 }
