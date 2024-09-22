@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import MessageInput from '../components/CreateMessage';
 
 
+
 const FileInput = ({ currentFile, onSave }) => {
     const [content, setContent] = useState(currentFile ? currentFile.content : '');
 
@@ -16,7 +17,7 @@ const FileInput = ({ currentFile, onSave }) => {
     return (
         <div>
             <h2>{currentFile ? currentFile.name : 'No file selected'}</h2>
-            <MessageInput/>
+                <MessageInput/>
             <button onClick={handleSave}>Save</button>
         </div>
     );

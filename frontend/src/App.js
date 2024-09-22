@@ -4,6 +4,7 @@ import FileInput from './components/FileInput';
 import './App.css'; // Import global styles if needed
 import Header from './components/Header/Header';
 
+
 const App = () => {
     const [files, setFiles] = useState([]);
     const [currentFile, setCurrentFile] = useState(null);
